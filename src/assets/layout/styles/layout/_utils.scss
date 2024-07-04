@@ -1,0 +1,37 @@
+.card {
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--card-shadow);
+    border-radius: $borderRadius;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.p-toast {
+    &.p-toast-top-right,
+    &.p-toast-top-left,
+    &.p-toast-top-center {
+        top: 70px;
+    }
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-summary {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-detail {
+    font-weight: 600;
+    margin: 0.5rem 0 0 0;
+}
+
+.p-toast {
+    opacity: 1;
+    position: fixed;
+    margin-left: 2rem;
+    width: fit-content;
+}

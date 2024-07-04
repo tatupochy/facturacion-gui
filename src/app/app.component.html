@@ -1,0 +1,17 @@
+<p-toast position="top-right" [baseZIndex]="5000">
+    <ng-template let-message pTemplate="message">
+        <div class="flex flex-column align-items-start gap-2" style="flex: 1">
+            <div class="flex align-items-center gap-2">
+                <span class="text-lg" [ngClass]="message.severity === 'success' ? 'pi pi-check' : 'pi pi-exclamation-triangle'"></span>
+                <span class="font-bold text-lg text-900">
+                    {{ message?.summary }}
+                </span>
+            </div>
+            <div class="font-medium text-900">
+                {{ message?.detail }}
+            </div>
+        </div>
+    </ng-template>
+</p-toast>
+
+<router-outlet></router-outlet>

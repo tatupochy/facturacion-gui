@@ -1,0 +1,14 @@
+<div class="flex flex-column flex-grow-1 justify-content-center align-items-center">
+    <div class="main-container">
+        @for (option of options; track $index) {
+            <div class="card-item-container card-item-clickable" [ngStyle]="{'width': width, 'height': height}"  (click)="selectOption(option)" [style.opacity]="value === null ? 1 : value?.id === option?.id ? 1 : 0.5" [ngClass]="value?.id === option?.id ? 'card-item-clickable-selected' : ''">
+                <span class="text-white font-semibold text-lg">
+                    {{ option.name }}
+                </span>
+                <div class="selected-icon">
+                    <ng-icon name="tablerCheck" size="1.2rem" strokeWidth="3px" color="#1142b1"></ng-icon>
+                </div>
+            </div>
+        }
+    </div>
+</div>

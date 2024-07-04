@@ -1,0 +1,45 @@
+<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-column align-items-center justify-content-center" style="max-width: 90%; width: 550px;">
+        <div class="w-full" style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
+                <div class="text-center mb-5"> 
+                    <img src="../../../../../assets/layout/images/logo_sda.png" alt="SDA logo" class="mb-5 w-14rem flex-shrink-0">
+                    <div class="text-900 text-3xl font-medium mb-3">Bienvenido!</div>
+                    <span class="text-600 font-medium">Inicia sesión para continuar</span>
+                </div>
+
+                <form [formGroup]="loginForm">
+                    <div class="field mb-4">
+                        <label class="block text-900 text-xl font-medium">Usuario</label>
+                        <input id="username" type="text" formControlName="username" autocomplete="username" placeholder="Usuario" pInputText class="w-full p-3" [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(loginForm, 'username')}">
+                        <div style="height: 16px;">
+                            <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(loginForm, 'username') ? 'visible' : 'hidden'}">
+                                <span>{{utils.getValidationErrorMessage(loginForm, 'username')}}</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="field mb-4">
+                        <label class="block text-900 font-medium text-xl">Contraseña</label>
+                        <p-password inputId="password" autocomplete="current-password" formControlName="password" placeholder="Contraseña" [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full p-3" [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(loginForm, 'password')}"></p-password>
+                        <div style="height: 16px;">
+                            <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(loginForm, 'password') ? 'visible' : 'hidden'}">
+                                <span>{{utils.getValidationErrorMessage(loginForm, 'password')}}</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="flex align-items-center justify-content-between mb-4 gap-5">
+                        <div class="flex align-items-center">
+                            <p-checkbox id="rememberme" [binary]="true" formControlName="rememberme" styleClass="mr-2"></p-checkbox>
+                            <label>Recordarme</label>
+                        </div>
+                        <a class="font-medium hover:underline ml-2 text-right cursor-pointer text-primary">Olvidaste tu contraseña?</a>
+                    </div>
+                    <p-button pRipple type="submit" label="Iniciar Sesión" [loading]="loading" class="w-full" styleClass="p-3 text-xl mb-3" (click)="login()"></p-button>
+                    <a class="font-medium hover:underline text-left cursor-pointer text-primary"><span class="pi pi-key mr-1"></span>Solicitar acceso</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,170 @@
+<div class="card flex flex-column flex-grow-1 overflow-hidden p-0 border-none">
+    <div class="flex overflow-y-auto h-full">
+        <div class="flex-grow-1 custom-table-paginator">
+            <p-table
+                #dt
+                [value]="dataTypes"
+                [columns]="colsDataType"
+                [loading]="isLoadingTable"
+                [showLoader]="false"
+                styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
+                sortField="name"
+                [sortOrder]="1"
+                sortMode="single"
+                [rowTrackBy]="utils.rowTrackByFunction"
+                dataKey="id"
+                [scrollable]="true"
+                scrollHeight="flex"
+                [rows]="30"
+                [globalFilterFields]="['name','code']"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]"
+                paginatorDropdownScrollHeight="120px"
+                paginatorDropdownAppendTo="body"
+                [showJumpToPageDropdown]="true"
+                [showPageLinks]="false"
+                currentPageReportTemplate="Mostrando desde {first} al {last} de {totalRecords} resultados">
+                <ng-template pTemplate="loadingbody">
+                    <div class="overlay-component">
+                        <span class="custom-loader"></span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="caption">
+                    <h3 class="font-semibold">Tipos de Datos</h3>
+                    <div class="flex flex-column md:flex-row md:align-items-center gap-3">
+                        <span class="block p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="search" (input)="utils.onGlobalFilter(dt, $event)" placeholder="Buscar" class="w-full md:w-auto"/>
+                        </span>
+                        <div class="flex justify-content-between align-items-center w-full gap-3">
+                            <p-button label="Agregar" icon="pi pi-plus" (onClick)="showDataTypeDialog()"></p-button>
+                            <p-button icon="pi pi-sync" loadingIcon="pi pi-sync" [loading]="isLoadingTable" (onClick)="getDataTypes(true)"></p-button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="5" class="empty-table-container">
+                            <div class="empty-message">
+                                <ng-icon name="tablerZoomQuestion" size="6rem" strokeWidth="1.7px" color="black"></ng-icon>
+                                <h4 class="text-center font-semibold">No se ha encontrado ningún tipo de dato</h4>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        @for (col of columns; track $index) {
+                            @if (col.header) {
+                                <th [style.width]="col.width" [ngClass]="{'text-center': col.center}" [pSortableColumn]="col.order ? col.field : null">
+                                    {{col.header}}
+                                    @if (col.order) {
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    }
+                                </th>
+                            } @else {
+                                <th [style]="'min-width: ' + col.width"></th>
+                            }
+                        }
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-dataType let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        @for (col of columns; track $index) {
+                            @if (col.field !== '' && col.field !== 'actions' && col.field !== 'state.name') {
+                                <td [ngClass]="{'text-center': col.center}">
+                                    <span class="p-column-title">
+                                        {{col.header}}
+                                    </span>
+                                    {{ utils.getNestedValue(dataType, col) }}
+                                </td>
+                            } 
+                            @else if (col.field === 'actions') {
+                                <td>
+                                    <div class="flex justify-content-center gap-2">
+                                        <p-button icon="pi pi-pencil" title="Editar" styleClass="p-button-sm p-button-warning" (onClick)="showDataTypeDialog(dataType)"></p-button>
+                                        <p-button icon="pi pi-trash" title="Eliminar" styleClass="p-button-sm p-button-danger" (onClick)="showConfirmDeleteDataType(dataType, rowIndex)"></p-button>
+                                    </div>
+                                </td>
+                            }
+                        }
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    transitionOptions="350ms ease"
+    [blockScroll]="true"
+    header="Tipo de Entidad"
+    [autofocus]="false"
+    [focusOnShow]="false"
+    [closable]="false"
+    [draggable]="false"
+    [style]="{width: '480px'}"
+    [(visible)]="displayDataTypeDialog"
+    [modal]="true">
+    <ng-template pTemplate="content">
+        <div class="flex flex-column justify-content-between h-full w-full gap-4">
+            <div class="grid m-0">
+                <form [formGroup]="dataTypeForm" style="display: contents;">
+                    <div class="formgrid grid flex-grow-1 p-fluid">
+                        <div class="field col-12"> <!-- Nombre -->
+                            <label class="block font-medium">Nombre <span class="p-error">*</span></label>
+                            <input
+                            type="text"
+                            pInputText id="name"
+                            placeholder="Ingrese el nombre"
+                            [maxLength]="50"
+                            formControlName="name"
+                            [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(dataTypeForm, 'name')}">
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(dataTypeForm, 'name') ? 'visible' : 'hidden'}">
+                                        <span>{{utils.getValidationErrorMessage(dataTypeForm, 'name')}}</span>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field col-12"> <!-- Código -->
+                            <label class="block font-medium">Código <span class="p-error">*</span></label>
+                            <input
+                            id="code"
+                            type="text"
+                            pInputText 
+                            placeholder="Ingrese el código"
+                            [maxLength]="10"
+                            formControlName="code"
+                            [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(dataTypeForm, 'code')}">
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(dataTypeForm, 'code') ? 'visible' : 'hidden'}">
+                                        <span>{{utils.getValidationErrorMessage(dataTypeForm, 'code')}}</span>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field col-12"> <!-- Nombre a Mostrar -->
+                            <label class="block font-medium">Nombre a Mostrar <span class="p-error">*</span></label>
+                            <input
+                            id="displayLabel"
+                            type="text"
+                            pInputText 
+                            placeholder="Ingrese el nombre a mostrar"
+                            [maxLength]="50"
+                            formControlName="displayLabel"
+                            [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(dataTypeForm, 'displayLabel')}">
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(dataTypeForm, 'displayLabel') ? 'visible' : 'hidden'}">
+                                        <span>{{utils.getValidationErrorMessage(dataTypeForm, 'displayLabel')}}</span>
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex justify-content-between align-items-center">
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-danger" (onClick)="showConfirmCancelEditDataType()"></p-button>
+                <p-button label="Guardar" icon="pi pi-check" styleClass="p-button-success" (onClick)="showConfirmSaveDataType()"></p-button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

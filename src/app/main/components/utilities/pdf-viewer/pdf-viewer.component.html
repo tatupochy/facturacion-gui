@@ -1,0 +1,20 @@
+@if (pdf?.data !== null && pdf !== null) {
+    <ngx-extended-pdf-viewer 
+        [base64Src]="pdf?.data"
+        height="80vh"
+        [textLayer]="true"
+        [showHandToolButton]="true"
+        [handTool]="false"
+        [showDrawEditor]="false"
+        [showTextEditor]="false"
+        [showStampEditor]="false"
+        [showPropertiesButton]="false"
+        [showOpenFileButton]="false"
+        [showInfiniteScrollButton]="false"
+        [zoom]="'page-actual'"
+        [filenameForDownload]="pdf.name">
+    </ngx-extended-pdf-viewer>
+}
+
+
+  

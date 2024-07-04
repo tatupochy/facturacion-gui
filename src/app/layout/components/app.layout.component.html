@@ -1,0 +1,157 @@
+<div class="layout-wrapper" [ngClass]="containerClass">
+    <app-topbar></app-topbar>
+    @if (!router.url.includes('/utilities')) {
+        <div class="layout-sidebar">
+            <app-sidebar></app-sidebar>
+        </div>
+    }
+    <div #mainContainer class="layout-main-container">
+        <div class="layout-main">
+            <router-outlet></router-outlet>
+        </div>
+        <app-footer></app-footer>
+    </div>
+    <div class="layout-mask"></div>
+</div>
+
+<p-confirmDialog #cdDelete key="deleteConfirm" transitionOptions="350ms ease" [maskStyleClass]="cdDelete._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+        <div class="flex justify-content-between flex-column w-full h-full">
+            <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-red-500 text-6xl"></i>
+                <h3 class="font-bold">{{cdDelete.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-red-500"></i>
+                <span class="text-sm font-semibold">Una vez realizada la acción, los cambios no se podrán deshacer</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-between align-items-center w-full">
+            <p-button (onClick)="cdDelete.reject()" label="Cancelar" icon="pi pi-times" styleClass="p-button-danger p-button-outlined w-9rem"></p-button>
+            <p-button (onClick)="cdDelete.accept()" [label]="cdDelete.confirmation?.acceptLabel || 'Eliminar'" [icon]="cdDelete.confirmation?.acceptIcon || 'pi pi-trash'" styleClass="p-button-danger w-9rem"></p-button>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdRejectConfirm key="rejectConfirm" transitionOptions="350ms ease" [maskStyleClass]="cdRejectConfirm._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+        <div class="flex justify-content-between flex-column w-full h-full">
+            <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-red-500 text-6xl"></i>
+                <h3 class="font-bold">{{cdRejectConfirm.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-red-500"></i>
+                <span class="text-sm font-semibold">Una vez realizada la acción, los cambios no se podrán deshacer</span>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-between align-items-center w-full">
+            <p-button (onClick)="cdRejectConfirm.reject()" label="Cancelar" icon="pi pi-times" styleClass="p-button-danger p-button-outlined"></p-button>
+            <p-button (onClick)="cdRejectConfirm.accept()" label="Rechazar" icon="pi pi-ban" styleClass="p-button-danger"></p-button>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdSave key="saveConfirm" transitionOptions="350ms ease" [maskStyleClass]="cdSave._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+      <div class="flex justify-content-between flex-column w-full h-full">
+          <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-primary text-6xl"></i>
+                <h3 class="font-bold">{{cdSave.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-primary text-xl"></i>
+                <span class="font-semibold">Recuerda verificar la información antes de confirmar</span>
+            </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-between align-items-center w-full">
+            <p-button (onClick)="cdSave.reject()" label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined w-9rem"></p-button>
+            <p-button (onClick)="cdSave.accept()" label="Guardar" icon="pi pi-save" styleClass="w-9rem"></p-button>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdConfirm key="confirm" transitionOptions="350ms ease" [maskStyleClass]="cdConfirm._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+      <div class="flex justify-content-between flex-column w-full h-full">
+          <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-primary text-6xl"></i>
+                <h3 class="font-bold">{{cdConfirm.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-primary text-xl"></i>
+                <span class="font-semibold">Recuerda verificar la información antes de confirmar</span>
+            </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <div class="flex justify-content-between align-items-center w-full">
+            <p-button (onClick)="cdConfirm.reject()" label="Cancelar" icon="pi pi-times" styleClass="p-button-outlined  w-9rem"></p-button>
+            <p-button (onClick)="cdConfirm.accept()" label="Confirmar" icon="pi pi-check" styleClass=" w-9rem"></p-button>
+        </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdCancel key="cancelConfirm" transitionOptions="350ms ease" [maskStyleClass]="cdCancel._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+      <div class="flex justify-content-between flex-column w-full h-full">
+          <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-yellow-500 text-6xl"></i>
+                <h3 class="font-bold">{{cdCancel.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-yellow-500 text-xl"></i>
+                <span class="text-base font-semibold">Los datos que no fueron guardados se perderan!</span>
+            </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-between align-items-center w-full">
+        <p-button (onClick)="cdCancel.reject()" label="No" icon="pi pi-times" styleClass="p-button-warning p-button-outlined  w-6rem"></p-button>
+        <p-button (onClick)="cdCancel.accept()" label="Si" icon="pi pi-check" styleClass="p-button-warning  w-6rem"></p-button>
+      </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdCustom key="custom" transitionOptions="350ms ease" [maskStyleClass]="cdCustom._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '420px', height: '320px' }">
+    <ng-template pTemplate="message">
+      <div class="flex justify-content-between flex-column w-full h-full">
+          <div class="text-center pb-3">
+                <i class="pi pi-exclamation-triangle text-yellow-500 text-6xl"></i>
+                <h3 class="font-bold">{{cdCustom.confirmation?.message}}</h3>
+            </div>
+            <div class="flex flex-row justify-content-center align-items-center gap-1">
+                <i class="pi pi-info-circle text-yellow-500 text-xl"></i>
+                <span class="text-base font-semibold">{{cdCustom.confirmation?.icon}}</span>
+            </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-between align-items-center w-full gap-5">
+        <p-button (onClick)="cdCustom.reject()" [label]="cdCustom.confirmation?.rejectLabel" icon="pi pi-times" styleClass="p-button-warning p-button-outlined " [style]="{'min-width': '6rem'}"></p-button>
+        <p-button (onClick)="cdCustom.accept()" [label]="cdCustom.confirmation?.acceptLabel" icon="pi pi-check" styleClass="p-button-warning " [style]="{'min-width': '6rem'}"></p-button>
+      </div>
+    </ng-template>
+</p-confirmDialog>
+
+<p-confirmDialog #cdLogin key="login" transitionOptions="350ms ease" class="dialog-confirm" [maskStyleClass]="cdLogin._visible ? 'p-component-overlay-enter' : 'p-component-overlay-leave'" [closable]="false" [style]="{ width: '370px', height: '290px' }">
+    <ng-template pTemplate="headless">
+        <div class="flex flex-column justify-content-between align-items-center w-full h-full gap-3 p-5 bg-white">
+            <div class="flex flex-column align-items-center w-full h-full">
+                <div class="c-icons time-alert w-7rem h-7rem"></div>
+                <div class="flex justify-content-center align-items-center flex-grow-1 w-full">
+                    <span class="font-bold text-3xl">{{cdLogin.confirmation?.message}}</span>
+                </div>
+            </div>
+            <div class="flex align-items-center w-full">
+                <p-button (onClick)="cdLogin.accept()" [label]="cdLogin.confirmation?.acceptLabel" icon="pi pi-sign-in text-xl" class="w-full" styleClass="p-button-outlined text-lg m-0 hover:bg-primary"></p-button>
+            </div>
+        </div>
+    </ng-template>
+</p-confirmDialog>

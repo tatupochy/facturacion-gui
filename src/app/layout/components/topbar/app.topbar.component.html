@@ -1,0 +1,17 @@
+<div class="layout-topbar">
+    <a class="layout-topbar-logo" (click)="this.router.navigate(['/home']);" style="cursor: pointer;">
+        <img src="assets/layout/images/logo_sda.png" alt="logo">
+    </a>
+
+    @if (!router.url.includes('/utilities')) {
+        <p-button #menubutton icon="pi pi-bars" class="layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()"></p-button>
+    }
+
+    <p-button #topbarmenubutton [label]="username" icon="pi pi-user" class="layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()"></p-button>
+
+    <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-active': layoutService.state.profileSidebarVisible}">
+        <p-button label="Perfil" icon="pi pi-user" class="layout-topbar-button"  [routerLink]="'/home/pages/account'"></p-button>
+        <p-button label="Configuración" icon="pi pi-cog" class="layout-topbar-button" title="Configuración" [routerLink]="'/home'"></p-button>
+        <p-button label="Cerrar Sesión" icon="pi pi-sign-out" class="layout-topbar-button" (click)="logout()"></p-button>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+$card-background: #3B82F6;
+$selected-color: #1142b1;
+
+:host {
+    width: 100%;
+}
+
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+}
+
+.card-item-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 0.5rem;
+    background: var(--surface-card);
+    box-shadow: 10px 10px 15px -15px rgba(0,0,0,0.62);  
+    border-radius: 0.75rem;
+}
+
+.card-item-clickable {
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 1;
+    background: $card-background;
+    box-shadow: 0 0 0 0 $selected-color;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+    transform: translateZ(0);
+}
+
+.card-item-clickable:hover {
+    transform: scale(1.05);
+    opacity: 1 !important;
+}
+
+.main-container:hover .card-item-clickable:not(:hover) {
+    transform: scale(0.9);
+    opacity: 0.5 !important;
+}
+
+
+.card-item-clickable-selected {
+    box-shadow: 0 0 0 3px $selected-color;
+
+    .selected-icon {
+        opacity: 1;;
+    }
+}
+
+.selected-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: -8px;
+    right: -8px;
+    background-color: white;
+    border: 2px solid $selected-color;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    transform: translateZ(0);
+}

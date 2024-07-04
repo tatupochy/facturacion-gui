@@ -1,0 +1,27 @@
+$table-header-color: #e1f0ff;
+$header-font-weight: 500;
+$table-border-color: #dfe7ef;
+$text-color: #343a40;
+
+::ng-deep {
+    .layout-main {
+        height: 82vh;
+        min-height: 0;
+    }
+}
+
+:host ::ng-deep {
+    display: flex;
+    height: 100%;
+
+    p-dialog .p-dialog .p-dialog-content:last-of-type {
+        display: flex;
+        flex: 1 1 auto;
+    }
+
+    .p-button.p-button-sm .p-button-icon {
+        font-size: 1rem;
+    }
+
+    
+}
