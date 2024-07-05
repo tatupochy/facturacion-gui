@@ -2,14 +2,12 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-const apiUrl = "https://www.sif.com.py";
+const apiUrl = "http://127.0.0.1:8000/api";
 
 export const environment = {
   production: false,
-  apiUrl: "http://192.168.100.54:8080/api/",
-  apiUrlDirector: apiUrl + '/noverumDirector',
-  apiUrlAdmin: apiUrl + '/noverumAdmin',
-  apiUrlSifSecurity: apiUrl + '/noverumSecure',
+  apiUrl: "http://127.0.0.1:8000/api",
+  apiUrlSifSecurity: apiUrl + '/seguridad',
 };
 
 /*

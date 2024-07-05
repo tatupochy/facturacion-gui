@@ -31,7 +31,8 @@ export class JwtInterceptor implements HttpInterceptor {
                 const expiredToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3OCIsImlhdCI6MTcxNDQ3OTgyNiwiZXhwIjoxNzE0NTE1ODI2fQ.BOdAPdgDriY-_T10RWWGl1JtdyuhRjBsc2uZ7jJ13hg'
                 
                 let user: JwtUser = JSON.parse(currentUser);
-                let token : string = user.accessToken;
+                let token : string = user.access;
+                let refreshToken : string = user.refresh;
 
                 if (token != null) {
                     authReq = request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });

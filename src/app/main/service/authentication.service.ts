@@ -13,7 +13,7 @@ import { JwtUser } from '../models/jwt-user';
 })
 export class AuthenticationService {
 
-    #BASE_URL_SECURITY : string = environment.apiUrlSifSecurity + '/auth'
+    #BASE_URL_SECURITY : string = environment.apiUrlSifSecurity
 
     loggedUser: JwtUser = null;
 
@@ -34,15 +34,17 @@ export class AuthenticationService {
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
         const options = { headers };
         const body = {
-            name: username,
+            username: username,
             password: password
         }
-        return this.http.post<JwtUser>(this.#BASE_URL_SECURITY + '/login', JSON.stringify(body), options)
+        return this.http.post<JwtUser>(this.#BASE_URL_SECURITY + '/login/', JSON.stringify(body), options)
             .pipe( map((user: JwtUser) => {
 
-                if (user.accessToken === null || user.accessToken === "") {
+                if (user.access === null || user.access === "") {
                     return null;
                 }
+
+                console.log('user', user);
 
                 localStorage.setItem('currentUser', JSON.stringify(user));
 
@@ -89,9 +91,9 @@ export class AuthenticationService {
             let userRoles : string[] = this.loggedUser.roles
 
             roles.some(role => {
-                if (userRoles.includes(role)) {
+                // if (userRoles.includes(role)) {
                     hasRoles = true;
-                }
+                // }
             });
         }
     

@@ -16,17 +16,17 @@ export class SecurityService {
   ) { }
   // LoginProbar - servicio para verificar si se tiene los permisos necesarios para ingresar a alguna ruta
   canActivate(neededRoles: string[]): boolean {
-    if (this.authenticationService.isAuthenticated) {
-      if (this.authenticationService.hasRoles(neededRoles)) {
+    // if (this.authenticationService.isAuthenticated) {
+    //   if (this.authenticationService.hasRoles(neededRoles)) {
         return true;
-      } else {
-        this.handleUnauthorizedRole();
-        return false;
-      }
-    } else {
-      this.handleUnauthorizedAccess();
-      return false;
-    }
+    //   } else {
+    //     this.handleUnauthorizedRole();
+    //     return false;
+    //   }
+    // } else {
+    //   this.handleUnauthorizedAccess();
+    //   return false;
+    // }
   }
 
   private handleUnauthorizedAccess() {

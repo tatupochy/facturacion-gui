@@ -14,7 +14,7 @@ export class Product {
 
         public iva: string | null = null,
 
-        public activo: boolean | null = null,
+        public activo: boolean | true = true
 
        
 

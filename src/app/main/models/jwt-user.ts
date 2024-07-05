@@ -9,9 +9,9 @@ export class JwtUser {
         
         public password: string | null = null,
         
-        public accessToken: string,
+        public access: string,
         
-        public refreshToken: string,
+        public refresh: string,
         
         public type: string = 'Bearer',
         

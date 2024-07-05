@@ -44,7 +44,7 @@ export class ProductsComponent implements OnInit {
     
   ngOnInit() {
       
-    this.titleService.setTitle('SDA - Entidades');
+    this.titleService.setTitle('Productos');
     
     this.colsProduct = [
      
@@ -119,31 +119,53 @@ export class ProductsComponent implements OnInit {
   }
 
   saveProduct() {
-
     const product = this.setProductData();
-
+  
     this.productService.saveProduct(product).subscribe({
       next: (response) => {
-        if (response.id === null) {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'No se ha podido guardar el producto', life: gc.NOTIFICATION_DURATION});
+        if (!response || !response.id) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'No se ha podido guardar el producto',
+            life: gc.NOTIFICATION_DURATION
+          });
           return;
         }
-
-        let index = this.products.findIndex((products) => products.id === response.id);
+  
+        // Encuentra el índice del producto en la lista
+        const index = this.products.findIndex(p => p.id === response.id);
+  
         if (index !== -1) {
+          // Si el producto existe, actualizarlo en la lista
           this.products[index] = response;
         } else {
+          // Si el producto no existe, añadirlo a la lista
           this.products.push(response);
         }
+  
+        // Crear una nueva referencia de la lista para que Angular detecte el cambio
         this.products = [...this.products];
+  
+        // Cerrar el diálogo del producto
         this.closeProductDialog();
-        this.messageService.add({severity: 'success', summary: 'Datos Guardados', detail: 'Se ha guardado correctamente el producto', life: gc.NOTIFICATION_DURATION});
+  
+        // Mostrar un mensaje de éxito
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Datos Guardados',
+          detail: 'Se ha guardado correctamente el producto',
+          life: gc.NOTIFICATION_DURATION
+        });
       },
-      error: (error: HttpError) => {
-        console.error(error);
-        if (error instanceof HttpError) {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: error.message, life: gc.NOTIFICATION_DURATION});
-        }
+      error: (error: any) => {
+        console.error('Error al guardar el producto:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al guardar el producto',
+          life: gc.NOTIFICATION_DURATION
+        });
       }
     });
   }
@@ -170,9 +192,11 @@ export class ProductsComponent implements OnInit {
   }
 
   updateProductState(product: Product, element: InputSwitch) {
-
+    console.log('Element:', element)
+    product.activo = element.modelValue;
     this.productService.saveProduct(product).subscribe({
       next: (response) => {
+        console.log('Response:', response);
         if (response.id === null) {
           this.messageService.add({severity: 'error', summary: 'Error', detail: 'No se ha podido actualizar el estado del producto', life: gc.NOTIFICATION_DURATION});
           element.writeValue(!element.modelValue);
@@ -241,26 +265,33 @@ export class ProductsComponent implements OnInit {
 
   getProducts(update?: boolean) {
     this.isLoadingTable = true;
-
-      this.productService.getAllProducts().subscribe({
-        next: (response) => {
-          if (update) {
-            this.messageService.add({severity: 'success', summary: 'Datos Actualizados', detail: 'Se han actualizado los datos de los productos', life: gc.NOTIFICATION_DURATION});
-          }
-          this.products = response;
-        },
-        error: (error: HttpError) => {
-          console.error(error);
-          if (error instanceof HttpError) {
-            this.messageService.add({severity: 'error', summary: 'Error', detail: error.message, life: gc.NOTIFICATION_DURATION});
-          }
-          this.isLoadingTable = false
-        },
-        complete: () => {
-          this.isLoadingTable = false
+  
+    this.productService.getAllProducts().subscribe({
+      next: (response) => {
+        this.products = response;
+        if (update) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Datos Actualizados',
+            detail: 'Se han actualizado los datos de los productos',
+            life: gc.NOTIFICATION_DURATION
+          });
         }
-     });
-
+      },
+      error: (error: any) => {
+        console.error('Error al obtener productos:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al obtener los productos',
+          life: gc.NOTIFICATION_DURATION
+        });
+        this.isLoadingTable = false;
+      },
+      complete: () => {
+        this.isLoadingTable = false;
+      }
+    });
   }
 
 }
