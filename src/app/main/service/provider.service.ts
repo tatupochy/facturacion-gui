@@ -5,20 +5,20 @@ import { environment } from 'src/environments/environment';
 import { map, Observable } from 'rxjs';
 
 import { HttpArrayResponse } from '../models/http-array.response';
-import { Product } from '../models/product';
+import { Provider } from '../models/provider';
 import { HttpObjectResponse } from '../models/http-object-response';
 import { tr } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class ProviderService {
 
   constructor(private http: HttpClient) {}
 
-  #BASE_URL = environment.apiUrl + '/productos'
+  #BASE_URL = environment.apiUrl + '/proveedores'
 
-  getAllProducts(): Observable<Product[]> {
+  getAllProviders(): Observable<Provider[]> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
 
@@ -28,66 +28,50 @@ export class ProductService {
           return response.data;
         } else {
           console.error('Respuesta inesperada del servidor:', response);
-          throw new Error('La respuesta no es un arreglo de productos');
-        }
-      })
-    );
-  }
-
-  getProductById(id: number): Observable<Product> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    const options = { headers };
-
-    return this.http.get<any>(`${this.#BASE_URL}/${id}/`, options).pipe(
-      map(response => {
-        if (response.status === 'success' && Array.isArray(response.data)) {
-          return response.data;
-        } else {
-          console.error('Respuesta inesperada del servidor:', response);
-          throw new Error('La respuesta no es un arreglo de productos');
+          throw new Error('La respuesta no es un arreglo de proveedores');
         }
       })
     );
   }
 
 
-  saveProduct(product: Product): Observable<Product> {
+  saveProvider(provider: Provider): Observable<Provider> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
-    const body = JSON.stringify(product); // Convertir el objeto a JSON
+    const body = JSON.stringify(provider); // Convertir el objeto a JSON
 
-    if (product.id) {
-      // Actualización del producto
-      return this.http.put<any>(`${this.#BASE_URL}/actualizar/${product.id}/`, body, options).pipe(
+    if (provider.id) {
+      // Actualización del proveedor
+      return this.http.put<any>(`${this.#BASE_URL}/actualizar/${provider.id}/`, body, options).pipe(
         map(response => {
           if (response.status === 'success') {
-            return response.data; // Retornar el producto actualizado
+            return response.data; // Retornar el proveedor actualizado
           } else {
             console.error('Respuesta inesperada del servidor:', response);
-            throw new Error('La respuesta no es un producto');
+            throw new Error('La respuesta no es un proveedor');
           }
         })
       );
     } else {
-      // Creación de un nuevo producto
+      // Creación de un nuevo proveedor
       return this.http.post<any>(`${this.#BASE_URL}/crear/`, body, options).pipe(
         map(response => {
           if (response.status === 'success') {
-            return response.data; // Retornar el producto creado
+            return response.data; // Retornar el proveedor creado
           } else {
             console.error('Respuesta inesperada del servidor:', response);
-            throw new Error('La respuesta no es un producto');
+            throw new Error('La respuesta no es un proveedor');
           }
         })
       );
     }
   }
 
-  deleteProduct(product: Product): Observable<number> {
+  deleteProvider(provider: Provider): Observable<number> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
     const body = {
-      id: product.id
+      id: provider.id
     }
     return this.http.post<number>(this.#BASE_URL + '/deleteEntity', JSON.stringify(body), options);
   }

@@ -7,6 +7,15 @@ import { SecurityService } from 'src/app/main/service/security.service';
     { path: 'products', loadChildren: () => import('./products/products.module').then(m => m.ProductsModule),
       canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
     },
+    { path: 'customers', loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule),
+      canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
+    },
+    { path: 'providers', loadChildren: () => import('./providers/providers.module').then(m => m.ProvidersModule),
+      canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
+    },
+    { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.IvoicesModule),
+      canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
+    },
     { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
       canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
     },

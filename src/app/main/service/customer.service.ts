@@ -5,20 +5,20 @@ import { environment } from 'src/environments/environment';
 import { map, Observable } from 'rxjs';
 
 import { HttpArrayResponse } from '../models/http-array.response';
-import { Product } from '../models/product';
+import { Customer } from '../models/customer';
 import { HttpObjectResponse } from '../models/http-object-response';
 import { tr } from 'date-fns/locale';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class CustomerService {
 
   constructor(private http: HttpClient) {}
 
-  #BASE_URL = environment.apiUrl + '/productos'
+  #BASE_URL = environment.apiUrl + '/clientes'
 
-  getAllProducts(): Observable<Product[]> {
+  getAllCustomers(): Observable<Customer[]> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
 
@@ -28,66 +28,50 @@ export class ProductService {
           return response.data;
         } else {
           console.error('Respuesta inesperada del servidor:', response);
-          throw new Error('La respuesta no es un arreglo de productos');
-        }
-      })
-    );
-  }
-
-  getProductById(id: number): Observable<Product> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    const options = { headers };
-
-    return this.http.get<any>(`${this.#BASE_URL}/${id}/`, options).pipe(
-      map(response => {
-        if (response.status === 'success' && Array.isArray(response.data)) {
-          return response.data;
-        } else {
-          console.error('Respuesta inesperada del servidor:', response);
-          throw new Error('La respuesta no es un arreglo de productos');
+          throw new Error('La respuesta no es un arreglo de clientes');
         }
       })
     );
   }
 
 
-  saveProduct(product: Product): Observable<Product> {
+  saveCustomer(customer: Customer): Observable<Customer> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
-    const body = JSON.stringify(product); // Convertir el objeto a JSON
+    const body = JSON.stringify(customer); // Convertir el objeto a JSON
 
-    if (product.id) {
-      // Actualización del producto
-      return this.http.put<any>(`${this.#BASE_URL}/actualizar/${product.id}/`, body, options).pipe(
+    if (customer.id) {
+      // Actualización del cliente
+      return this.http.put<any>(`${this.#BASE_URL}/actualizar/${customer.id}/`, body, options).pipe(
         map(response => {
           if (response.status === 'success') {
-            return response.data; // Retornar el producto actualizado
+            return response.data; // Retornar el cliente actualizado
           } else {
             console.error('Respuesta inesperada del servidor:', response);
-            throw new Error('La respuesta no es un producto');
+            throw new Error('La respuesta no es un cliente');
           }
         })
       );
     } else {
-      // Creación de un nuevo producto
+      // Creación de un nuevo cliente
       return this.http.post<any>(`${this.#BASE_URL}/crear/`, body, options).pipe(
         map(response => {
           if (response.status === 'success') {
-            return response.data; // Retornar el producto creado
+            return response.data; // Retornar el cliente creado
           } else {
             console.error('Respuesta inesperada del servidor:', response);
-            throw new Error('La respuesta no es un producto');
+            throw new Error('La respuesta no es un cliente');
           }
         })
       );
     }
   }
 
-  deleteProduct(product: Product): Observable<number> {
+  deleteCustomer(customer: Customer): Observable<number> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
     const body = {
-      id: product.id
+      id: customer.id
     }
     return this.http.post<number>(this.#BASE_URL + '/deleteEntity', JSON.stringify(body), options);
   }

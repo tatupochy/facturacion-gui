@@ -1,0 +1,133 @@
+<!-- invoices.component.html -->
+<div class="card flex flex-column flex-grow-1 overflow-hidden p-0 border-none">
+    <div class="flex overflow-y-auto h-full">
+        <div class="flex-grow-1 custom-table-paginator">
+            <p-table
+                #dt
+                [value]="invoices"
+                [columns]="colsInvoice"
+                [loading]="isLoadingTable"
+                [showLoader]="false"
+                styleClass="p-datatable-sm p-datatable-gridlines p-datatable-striped"
+                sortField="name"
+                [sortOrder]="1"
+                sortMode="single"
+                [rowTrackBy]="utils.rowTrackByFunction"
+                dataKey="id"
+                [scrollable]="true"
+                scrollHeight="flex"
+                [rows]="30"
+                [globalFilterFields]="['name','code','ruc','fantasyName']"
+                [paginator]="true"
+                [rowsPerPageOptions]="[10,20,30]"
+                paginatorDropdownScrollHeight="120px"
+                paginatorDropdownAppendTo="body"
+                [showJumpToPageDropdown]="true"
+                [showPageLinks]="false"
+                currentPageReportTemplate="Mostrando desde {first} al {last} de {totalRecords} resultados">
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [style.width]="col.width" [ngClass]="{'text-center': col.center}" [pSortableColumn]="col.order ? col.field : null">
+                            {{ col.header }}
+                            <p-sortIcon *ngIf="col.order" [field]="col.field"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-invoice let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td *ngFor="let col of columns" [ngClass]="{'text-center': col.center}">
+                            <span class="p-column-title">{{ col.header }}</span>
+                            <ng-container [ngSwitch]="col.field">
+                                <ng-container *ngSwitchCase="'activo'">
+                                    <div class="flex justify-content-center align-items-center">
+                                        <p-inputSwitch #switch [ngModel]="invoice.activo" (onChange)="updateInvoiceState(invoice, switch)"></p-inputSwitch>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngSwitchCase="'actions'">
+                                    <div class="flex justify-content-center gap-2">
+                                        <p-button icon="pi pi-pencil" title="Editar" styleClass="p-button-sm p-button-warning" (onClick)="showInvoiceDialog(invoice)"></p-button>
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngSwitchDefault>
+                                    {{ utils.getNestedValue(invoice, col) }}
+                                </ng-container>
+                            </ng-container>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-dialog
+    transitionOptions="350ms ease"
+    [blockScroll]="true"
+    header="Factura"
+    [autofocus]="false"
+    [focusOnShow]="false"
+    [closable]="false"
+    [draggable]="false"
+    [style]="{width: '480px'}"
+    [(visible)]="displayInvoiceDialog"
+    [modal]="true">
+    <ng-template pTemplate="content">
+        <div class="flex flex-column justify-content-between h-full w-full gap-4">
+            <div class="grid m-0">
+                <form [formGroup]="invoiceForm" style="display: contents;">
+                    <div class="formgrid grid flex-grow-1 p-fluid">
+                        <div class="field col-12"> <!-- Nombre -->
+                            <label class="block font-medium">Nombre <span class="p-error">*</span></label>
+                            <input
+                                type="text"
+                                pInputText
+                                id="nombre"
+                                placeholder="Ingrese el nombre"
+                                [maxLength]="255"
+                                formControlName="nombre"
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'nombre')}">
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(invoiceForm, 'nombre') ? 'visible' : 'hidden'}">
+                                    <span>{{ utils.getValidationErrorMessage(invoiceForm, 'nombre') }}</span>
+                                </small>
+                            </div>
+                        </div>
+                        <!-- Otros campos de la factura -->
+                    </div>
+
+                    <!-- Items de la factura -->
+                    <h3>Ítems</h3>
+                    <div formArrayName="items">
+                        <div *ngFor="let item of getInvoiceItemsControls(); let i = index" [formGroupName]="i">
+                            <div class="formgrid grid p-fluid">
+                                <div class="field col-4">
+                                    <label>Producto</label>
+                                    <input type="text" pInputText formControlName="producto" placeholder="Producto">
+                                </div>
+                                <div class="field col-4">
+                                    <label>Cantidad</label>
+                                    <input type="number" pInputText formControlName="cantidad" placeholder="Cantidad">
+                                </div>
+                                <div class="field col-4">
+                                    <label>Precio Unitario</label>
+                                    <input type="number" pInputText formControlName="precio_unitario" placeholder="Precio Unitario">
+                                </div>
+                                <div class="col-12 text-right">
+                                    <button type="button" pButton icon="pi pi-trash" class="p-button-danger p-button-sm" (click)="removeInvoiceItem(i)">Eliminar Ítem</button>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" pButton icon="pi pi-plus" class="p-button-success p-button-sm" (click)="addInvoiceItem()">Añadir Ítem</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="flex justify-content-between align-items-center">
+                <p-button label="Cancelar" icon="pi pi-times" styleClass="p-button-danger" (onClick)="showConfirmCancelEditInvoice()"></p-button>
+                <p-button label="Guardar" icon="pi pi-check" styleClass="p-button-success" (onClick)="showConfirmSaveInvoice()"></p-button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
