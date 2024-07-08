@@ -16,6 +16,9 @@ import { InvoiceItem } from 'src/app/main/models/invoice-item';
 
 import { InvoiceService } from 'src/app/main/service/invoice.service';
 import { ProductService } from 'src/app/main/service/product.service';
+import { CustomerService } from 'src/app/main/service/customer.service';
+import { Customer } from 'src/app/main/models/customer';
+import { Product } from 'src/app/main/models/product';
 
 @Component({
   selector: 'app-invoices',
@@ -26,8 +29,12 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
   colsInvoice: any[] = [];
   invoices: Invoice[] = [];
+  customers: Customer[] = [];
+  products: Product[] = [];
+  sale_conditions: String[] = ['contado', 'credito']
   selectedInvoice: Invoice = new Invoice();
   invoiceForm: FormGroup = new FormGroup({});
+  invoiceItemForm: FormGroup = new FormGroup({});
   displayNewInvoiceDialog: boolean = false;
 
   filterForm: FormGroup = new FormGroup({});
@@ -53,37 +60,34 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     private titleService: Title,
     private invoiceService: InvoiceService,
     private productService: ProductService,
+    private customerService: CustomerService,
     public utils: UtilsService,
   ) {}
     
   ngOnInit() {
       
-    this.titleService.setTitle('SDA - Invoiceencias');
+    this.titleService.setTitle('Facturas');
     
     this.colsInvoice = [
-      { field: 'index', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'invoiceNumber', header: 'N° de Acta', width: '25%', order: true, center: true },
-      { field: 'invoiceDateStr', header: 'Fecha de Creación', width: '25%', order: true, center: true },
-      { field: 'updateUser', header: 'Usuario', width: '20%', order: true, center: true },
-      { field: 'state.name', header: 'Estado', width: '25%', order: true, center: true },
+      { field: 'numero', header: 'N°', width: '5%', order: false, center: true },
+      { field: 'numeracion', header: 'Numeración', width: '25%', order: true, center: true },
+      { field: 'fecha_emision', header: 'Fecha de Emisión', width: '20%', order: true, center: true },
+      { field: 'cliente.nombre', header: 'Cliente', width: '20%', order: true, center: true },
+      { field: 'total', header: 'Total', width: '15%', order: true, center: true },
+      { field: 'timbrado', header: 'Timbrado', width: '15%', order: true, center: true },
       { field: 'actions', header: '', width: '100px', order: false, center: false },
     ];
 
     this.colsNewInvoiceItems = [
       { field: 'index', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'identifier', header: 'N° de Documento', width: '25%', order: true, center: true },
-      { field: 'updateDateStr', header: 'Fecha de Documento', width: '25%', order: true, center: true },
-      { field: 'stored', header: 'Inventariado', width: '25%', order: true, center: true },
-      { field: 'box.number', header: 'N° de Caja', width: '20%', order: true, center: true },
-      { field: 'actions', header: '', width: '100px', order: false, center: false },
+      { field: 'producto.nombre', header: 'Producto', width: '50%', order: true, center: true },
+      { field: 'cantidad', header: 'Cantidad', width: '50%', order: true, center: true },
     ];
 
     this.colsInvoiceItems = [
       { field: 'index', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'identifier', header: 'N° de Documento', width: '25%', order: true, center: true },
-      { field: 'updateDateStr', header: 'Fecha de Documento', width: '25%', order: true, center: true },
-      { field: 'stored', header: 'Inventariado', width: '25%', order: true, center: true },
-      { field: 'box.number', header: 'N° de Caja', width: '20%', order: true, center: true },
+      { field: 'producto.nombre', header: 'Producto', width: '50%', order: true, center: true },
+      { field: 'cantidad', header: 'Cantidad', width: '50%', order: true, center: true }
     ];
 
     this.loadDataFromApi();
@@ -98,23 +102,25 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
   loadDataFromApi() {
 
-    // this.getEntities();
-    
+    console.log('loadData');
+    this.getInvoices();
+    this.getCustomers();
+    this.getProducts();
   }
   // Forms
 
   initInvoiceForm() {
     this.invoiceForm = this.fb.group({
       id: [this.selectedInvoice.id],
-      numero: [this.selectedInvoice.numero, [Validators.required, Validators.maxLength(100)]],
+      numero: [this.selectedInvoice.numero, [Validators.required, Validators.maxLength(12)]],
       numeracion: [this.selectedInvoice.numeracion, [Validators.required, Validators.maxLength(100)]],
-      fecha_emision: [this.selectedInvoice.fecha_emision, [Validators.required]],
+      fecha_emision: [format(this.currentDate, 'dd/MM/yyyy'), [Validators.required]],
       cliente: [this.selectedInvoice.cliente, [Validators.required]],
       sub_total: [this.selectedInvoice.sub_total, [Validators.required, Validators.min(0)]],
       total: [this.selectedInvoice.total, [Validators.required, Validators.min(0)]],
       establecimiento: [this.selectedInvoice.establecimiento, [Validators.required, Validators.maxLength(100)]],
       punto_expedicion: [this.selectedInvoice.punto_expedicion, [Validators.required, Validators.maxLength(100)]],
-      fecha_vencimiento: [this.selectedInvoice.fecha_vencimiento, [Validators.required]],
+      fecha_vencimiento: [null],
       timbrado: [this.selectedInvoice.timbrado, [Validators.required, Validators.maxLength(100)]],
       condicion_venta: [this.selectedInvoice.condicion_venta, [Validators.required]],
       total_iva_5: [this.selectedInvoice.total_iva_5, [Validators.required, Validators.min(0)]],
@@ -125,6 +131,15 @@ export class InvoicesComponent implements OnInit, OnDestroy {
       sub_total_iva: [this.selectedInvoice.sub_total_iva, [Validators.required, Validators.min(0)]],
       items: this.fb.array([])
     });
+    console.log('invoiceForm', this.invoiceForm);
+  }
+
+  initInvoiceItemForm(){
+    this.invoiceItemForm = this.fb.group({
+      producto: [null],
+      cantidad: [null],
+    });
+    console.log('invoiceItemForm', this.invoiceItemForm);
   }
 
   // Invoice
@@ -132,6 +147,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   async showInvoiceDialog(invoice?: Invoice) {
     this.selectedInvoice = invoice ? invoice : new Invoice();
     this.initInvoiceForm();
+    this.initInvoiceItemForm();
     this.displayNewInvoiceDialog = true;
   }
 
@@ -167,6 +183,19 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
     return invoice;
 
+
+  }
+
+  setInvoiceItemData() {
+
+    const data = this.invoiceItemForm.value;
+
+    let invoiceItem = new InvoiceItem();
+
+    invoiceItem.cantidad = data.cantidad;
+    invoiceItem.producto = data.producto;
+
+    return invoiceItem;
 
   }
 
@@ -326,6 +355,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
       if (responseInvoice) {
         this.selectedInvoice = responseInvoice;
         this.initInvoiceForm();
+        this.initInvoiceItemForm();
         this.displayInvoiceItemsDialog = true;
       }
     } catch (error) {
@@ -349,8 +379,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   }
 
   addInvoiceItem() {
-    if (this.invoiceForm.invalid) {
-      this.invoiceForm.markAllAsTouched();
+    if (this.invoiceItemForm.invalid) {
+      this.invoiceItemForm.markAllAsTouched();
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
@@ -361,15 +391,20 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     }
   
     // Obtener datos de la factura y del producto
-    let invoice = this.selectedInvoice;  // Usar el invoice ya seleccionado
-    let product = this.invoiceForm.value.product;  // Asegurarse de que el producto se ha seleccionado del formulario
-  
+    let invoice = new Invoice;
+    console.log('Form', this.invoiceItemForm.value);
+    let producto = this.invoiceItemForm.value.producto;
+    let cantidad = this.invoiceItemForm.value.cantidad;  // Asegurarse de que el producto se ha seleccionado del formulario
+    
+    console.log('invoice', invoice);
+    console.log('product', producto);
+
     // Crear un nuevo InvoiceItem
     let invoiceItem = new InvoiceItem();
     invoiceItem.id = null;
-    invoiceItem.cantidad = this.invoiceForm.value.cantidad;
+    invoiceItem.cantidad = cantidad;
     invoiceItem.factura = invoice;
-    invoiceItem.producto = product;
+    invoiceItem.producto = producto;
   
     // Obtener el FormArray de items
     const itemsArray = this.invoiceForm.get('items') as FormArray;
@@ -378,11 +413,11 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     itemsArray.push(this.fb.group({
       producto: [invoiceItem.producto, Validators.required],
       cantidad: [invoiceItem.cantidad, [Validators.required, Validators.min(1)]],
-      precio_unitario: [invoiceItem.producto.precio, [Validators.required, Validators.min(0.01)]]
     }));
   
     // Actualizar el formulario
     this.invoiceForm.setControl('items', itemsArray);
+    console.log('invoiceForm', this.invoiceForm)
   }
   
 
@@ -394,8 +429,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   // Api Calls
 
   getInvoices(update?: boolean) {
-    this.isLoadingNewInvoice;
-
+    console.log("getInvoices")
     this.invoiceService.getAllInvoices().subscribe({
       next: (response) => {
         this.invoices = response;
@@ -420,6 +454,58 @@ export class InvoicesComponent implements OnInit, OnDestroy {
       },
       complete: () => {
         this.isLoadingNewInvoice = false;
+      }
+    });
+  }
+
+  getCustomers(update?: boolean) {
+    console.log("getCustomers")
+    this.customerService.getAllCustomers().subscribe({
+      next: (response) => {
+        this.customers = response;
+        if (update) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Datos Actualizados',
+            detail: 'Se han actualizado los datos de los clientes',
+            life: gc.NOTIFICATION_DURATION
+          });
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al obtener clientes:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al obtener clientes',
+          life: gc.NOTIFICATION_DURATION
+        });
+      }
+    });
+  }
+
+  getProducts(update?: boolean) {
+    console.log("getProducts")
+    this.productService.getAllProducts().subscribe({
+      next: (response) => {
+        this.products = response;
+        if (update) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Datos Actualizados',
+            detail: 'Se han actualizado los datos de los productos',
+            life: gc.NOTIFICATION_DURATION
+          });
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al obtener clientes:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al obtener productos',
+          life: gc.NOTIFICATION_DURATION
+        });
       }
     });
   }

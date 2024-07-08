@@ -38,9 +38,9 @@ export class InvoiceService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
 
-    return this.http.get<any>(`${this.#BASE_URL}/${id}/`, options).pipe(
+    return this.http.get<any>(`${this.#BASE_URL}/detalle/${id}/`, options).pipe(
       map(response => {
-        if (response.status === 'success' && Array.isArray(response.data)) {
+        if (response.status === 'success') {
           return response.data;
         } else {
           console.error('Respuesta inesperada del servidor:', response);

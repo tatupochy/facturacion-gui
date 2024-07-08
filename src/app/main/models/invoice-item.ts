@@ -13,7 +13,7 @@ export class InvoiceItem {
 
         public cantidad: number | null = null,
 
-        public precio_unitario: number | null = null,
+        public precio: number | null = null,
 
         public iva_exenta: number | null = null,
 

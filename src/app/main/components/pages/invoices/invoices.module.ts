@@ -17,6 +17,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { AppComponent } from 'src/app/app.component';
 import { InvoicesComponent } from './invoices.component';
 import { IvoicesRoutingModule } from '../invoices/invoices-routing.module';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { IvoicesRoutingModule } from '../invoices/invoices-routing.module';
     TableModule,
     ButtonModule,
     InputTextModule,
+    CalendarModule,
     DropdownModule,
     InputSwitchModule,
     DialogModule,
