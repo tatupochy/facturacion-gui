@@ -86,8 +86,11 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
     this.colsInvoiceItems = [
       { field: 'index', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'producto.nombre', header: 'Producto', width: '50%', order: true, center: true },
-      { field: 'cantidad', header: 'Cantidad', width: '50%', order: true, center: true }
+      { field: 'producto.nombre', header: 'Producto', width: '25%', order: true, center: true },
+      { field: 'cantidad', header: 'Cantidad', width: '25%', order: true, center: true },
+      { field: 'iva_exenta', header: 'Exentas', width: '25%', order: true, center: true },
+      { field: 'iva_10', header: '10', width: '25%', order: true, center: true },
+      { field: 'iva_5', header: '5', width: '25%', order: true, center: true },
     ];
 
     this.loadDataFromApi();
@@ -112,23 +115,13 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   initInvoiceForm() {
     this.invoiceForm = this.fb.group({
       id: [this.selectedInvoice.id],
-      numero: [this.selectedInvoice.numero, [Validators.required, Validators.maxLength(12)]],
-      numeracion: [this.selectedInvoice.numeracion, [Validators.required, Validators.maxLength(100)]],
-      fecha_emision: [format(this.currentDate, 'dd/MM/yyyy'), [Validators.required]],
+      fecha_emision: [format(this.currentDate, 'yyyy/MM/dd'), [Validators.required]],
       cliente: [this.selectedInvoice.cliente, [Validators.required]],
-      sub_total: [this.selectedInvoice.sub_total, [Validators.required, Validators.min(0)]],
-      total: [this.selectedInvoice.total, [Validators.required, Validators.min(0)]],
-      establecimiento: [this.selectedInvoice.establecimiento, [Validators.required, Validators.maxLength(100)]],
-      punto_expedicion: [this.selectedInvoice.punto_expedicion, [Validators.required, Validators.maxLength(100)]],
+      establecimiento: [this.selectedInvoice.establecimiento, [Validators.required, Validators.maxLength(3)]],
+      punto_expedicion: [this.selectedInvoice.punto_expedicion, [Validators.required, Validators.maxLength(3)]],
       fecha_vencimiento: [null],
-      timbrado: [this.selectedInvoice.timbrado, [Validators.required, Validators.maxLength(100)]],
+      timbrado: [this.selectedInvoice.timbrado, [Validators.required, Validators.maxLength(7)]],
       condicion_venta: [this.selectedInvoice.condicion_venta, [Validators.required]],
-      total_iva_5: [this.selectedInvoice.total_iva_5, [Validators.required, Validators.min(0)]],
-      sub_total_iva_5: [this.selectedInvoice.sub_total_iva_5, [Validators.required, Validators.min(0)]],
-      total_iva_10: [this.selectedInvoice.total_iva_10, [Validators.required, Validators.min(0)]],
-      sub_total_iva_10: [this.selectedInvoice.sub_total_iva_10, [Validators.required, Validators.min(0)]],
-      total_iva: [this.selectedInvoice.total_iva, [Validators.required, Validators.min(0)]],
-      sub_total_iva: [this.selectedInvoice.sub_total_iva, [Validators.required, Validators.min(0)]],
       items: this.fb.array([])
     });
     console.log('invoiceForm', this.invoiceForm);
