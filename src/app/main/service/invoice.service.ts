@@ -34,6 +34,28 @@ export class InvoiceService {
     );
   }
 
+  searchInvoicesByFilter(filter: any): Observable<Invoice[]> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const options = { headers };
+    const body = {
+      entity: filter.entity,
+      documentarySerie: filter.documentarySerie,
+      identifier: filter.identifier,
+      invoiceDateStart: filter.invoiceDateStart,
+      invoiceDateEnd: filter.invoiceDateEnd,
+    }
+    return this.http.post<any>(`${this.#BASE_URL}/buscar/`, JSON.stringify(body), options).pipe(
+      map(response => {
+        if (response.status === 'success' && Array.isArray(response.data)) {
+          return response.data;
+        } else {
+          console.error('Respuesta inesperada del servidor:', response);
+          throw new Error('La respuesta no es un arreglo de facturas');
+        }
+      })
+    );
+  }
+
   getInvoiceById(id: number): Observable<Invoice> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };

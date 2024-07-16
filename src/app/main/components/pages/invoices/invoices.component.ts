@@ -31,11 +31,13 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   invoices: Invoice[] = [];
   customers: Customer[] = [];
   products: Product[] = [];
+  operations: String[] = ['venta', 'compra']
   sale_conditions: String[] = ['contado', 'credito']
   selectedInvoice: Invoice = new Invoice();
   invoiceForm: FormGroup = new FormGroup({});
   invoiceItemForm: FormGroup = new FormGroup({});
   displayNewInvoiceDialog: boolean = false;
+  isSearchingIvoices: boolean = false;
 
   filterForm: FormGroup = new FormGroup({});
  
@@ -107,7 +109,6 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   loadDataFromApi() {
 
     console.log('loadData');
-    this.getInvoices();
     this.getCustomers();
     this.getProducts();
   }
@@ -136,7 +137,44 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     console.log('invoiceItemForm', this.invoiceItemForm);
   }
 
+  initFilterForm(){
+    this.filterForm = this.fb.group({
+      operacion: [null],
+      fecha_emision: [null]
+    });
+  }
+  
   // Invoice
+
+  searchFilterIvoices() {
+    const data = this.filterForm.value;
+
+    let filter = {
+      operacion: data.operacion,
+      fecha_emision: data.fecha_emision
+    }
+
+    this.isSearchingIvoices = true;
+
+    this.invoiceService.searchInvoicesByFilter(filter).subscribe({
+      next: (response) => {
+        this.invoices = response;
+      },
+      error: (error: any) => {
+        console.error('Error al obtener facturas:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al obtener las facturas',
+          life: gc.NOTIFICATION_DURATION
+        });
+        this.isSearchingIvoices = false;
+      },
+      complete: () => {
+        this.isSearchingIvoices = false;
+      }
+    });
+  }
 
   async showInvoiceDialog(invoice?: Invoice) {
     this.selectedInvoice = invoice ? invoice : new Invoice();
@@ -423,7 +461,10 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   // Api Calls
 
   getInvoices(update?: boolean) {
+    this.isSearchingIvoices = true;
+
     console.log("getInvoices")
+
     this.invoiceService.getAllInvoices().subscribe({
       next: (response) => {
         this.invoices = response;
