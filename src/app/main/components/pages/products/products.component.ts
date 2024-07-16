@@ -50,7 +50,8 @@ export class ProductsComponent implements OnInit {
      
       { field: 'nombre', header: 'Nombre', width: '40%', order: true, center: false },
       { field: 'descripcion', header: 'Descripcion', width: '20%', order: true, center: true },
-      { field: 'precio', header: 'Precio', width: '20%', order: true, center: true },
+      { field: 'stock', header: 'Stock', width: '10%', order: true, center: true },
+      { field: 'precio', header: 'Precio', width: '10%', order: true, center: true },
       { field: 'iva', header: 'IVA', width: '10%', order: true, center: true },
       { field: 'activo', header: 'Estado', width: '10%', order: true, center: true },
       { field: 'actions', header: '', width: '100px', order: false, center: false },

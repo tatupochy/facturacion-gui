@@ -8,6 +8,8 @@ export class Product {
 
         public nombre: string | null = null,
 
+        public stock: number | null = null,
+
         public descripcion: string | null = null,
 
         public precio: number | null = null,

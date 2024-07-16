@@ -30,7 +30,9 @@ export class AppMenuComponent implements OnInit {
           { label: 'Productos', icon: 'pi pi-tags', routerLink: ['/home/pages/products'] },
           { label: 'Clientes', icon:'pi pi-user', routerLink: ['/home/pages/customers'] },
           { label: 'Proveedores', icon:'pi pi-user', routerLink: ['/home/pages/providers'] },
-          { label: 'Facturas', icon:'pi pi-receipt', routerLink: ['/home/pages/invoices'] }
+          { label: 'Facturas', icon:'pi pi-receipt', routerLink: ['/home/pages/invoices'] },
+          { label: 'Ventas', icon:'pi pi-receipt', routerLink: ['/home/pages/sales'] },
+          { label: 'Compras', icon:'pi pi-receipt', routerLink: ['/home/pages/purchases'] }
         ]
       },
       // { label: 'Tipos',

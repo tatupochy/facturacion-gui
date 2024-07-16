@@ -1,5 +1,6 @@
 import { Customer } from "./customer";
 import { InvoiceItem } from "./invoice-item";
+import { Provider } from "./provider";
 
 export class Invoice {
 
@@ -14,6 +15,10 @@ export class Invoice {
         public fecha_emision : Date | null = null,
 
         public cliente: Customer | null = null,
+
+        public proveedor: Provider | null = null,
+
+        public operacion: string | null = null,
         
         public sub_total: number | null = null,
 

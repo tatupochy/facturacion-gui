@@ -16,6 +16,12 @@ import { SecurityService } from 'src/app/main/service/security.service';
     { path: 'invoices', loadChildren: () => import('./invoices/invoices.module').then(m => m.IvoicesModule),
       canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
     },
+    { path: 'sales', loadChildren: () => import('./sales/sales.module').then(m => m.SalesModule),
+      canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
+    },
+    { path: 'purchases', loadChildren: () => import('./purchases/purchases.module').then(m => m.PurchasesModule),
+      canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
+    },
     { path: 'account', loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
       canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
     },
@@ -31,6 +37,7 @@ import { SecurityService } from 'src/app/main/service/security.service';
     { path: 'types', loadChildren: () => import('./types/types.module').then(m => m.TypesModule),
       canActivate: [() => inject(SecurityService).canActivate(['Administrador', 'Supervisor'])]
     },
+    
     { path: '**', redirectTo: '/notfound' }
   ])],
   exports: [RouterModule]
