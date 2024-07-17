@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, map, retry, throwError } from 'rxjs';
+import { Observable, catchError, map, retry, tap, throwError } from 'rxjs';
 
 
 import { GlobalConstans as gc } from 'src/app/common/global-constans';
@@ -37,6 +37,7 @@ export class AuthenticationService {
             username: username,
             password: password
         }
+        console.log('body', body);
         return this.http.post<JwtUser>(this.#BASE_URL_SECURITY + '/login/', JSON.stringify(body), options)
             .pipe( map((user: JwtUser) => {
 
@@ -58,6 +59,43 @@ export class AuthenticationService {
             catchError(this.handleError)
         );
     }
+
+    refresh(refreshToken: string): Observable<string> {
+        const headers = new HttpHeaders().set('Content-Type', 'application/json');
+        const options = { headers };
+        const body = { refresh: refreshToken };
+        const url = this.#BASE_URL_SECURITY + '/refresh/';
+        console.log('body', body);
+        console.log('url', url);
+    
+        return this.http.post<{ access: string }>(url, JSON.stringify(body), options)
+            .pipe(
+                tap(response => {
+                    console.log('HTTP request sent, response:', response);
+                }),
+                catchError(error => {
+                    console.error('HTTP request error', error);
+                    return throwError(error);
+                }),
+                map(response => {
+                    console.log('response', response);
+                    const access = response.access;
+                    console.log('access', access);
+                    if (!access) {
+                        return null;
+                    }
+    
+                    console.log('refreshToken', access);
+    
+                    this.loggedUser.access = access;
+                    localStorage.setItem('currentUser', JSON.stringify(this.loggedUser));
+    
+                    return access;
+                }),
+                retry(1),
+                catchError(this.handleError)
+            );
+    }       
 
     logout() {
 

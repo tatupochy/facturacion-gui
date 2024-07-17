@@ -35,7 +35,7 @@ export class JwtInterceptor implements HttpInterceptor {
                 let refreshToken : string = user.refresh;
 
                 if (token != null) {
-                    authReq = request.clone({ headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
+                    authReq = request.clone({  });
                 }
 
             }

@@ -162,7 +162,109 @@
                         </div>
                     </ng-template>
                     <ng-template pTemplate="caption">
-                        <h4 class="font-semibold">{{'Detalles de Factura: ' + selectedInvoice?.numero}}</h4>
+                        <h4 class="font-semibold">{{'Detalles de Factura: ' + selectedInvoice?.numeracion}}</h4>
+                        <div class="grid p-fluid">
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2" *ngIf="selectedInvoice?.cliente"> 
+                                <label class="font-medium text-700">Cliente</label>
+                                <input 
+                                pInputText
+                                id="cliente"
+                                type="text"
+                                [value]="selectedInvoice?.cliente?.nombre"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'cliente')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2" *ngIf="selectedInvoice?.proveedor"> 
+                                <label class="font-medium text-700">Proveedor</label>
+                                <input 
+                                pInputText
+                                id="proveedor"
+                                type="text"
+                                [value]="selectedInvoice?.proveedor?.nombre"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'proveedor')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Operación</label>
+                                <input 
+                                pInputText
+                                id="operacion"
+                                type="text"
+                                [value]="selectedInvoice?.operacion"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'operacion')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Fecha de emisión</label>
+                                <input 
+                                pInputText
+                                id="fecha_emision"
+                                type="text"
+                                [value]="selectedInvoice?.fecha_emision"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'fecha_emision')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Fecha de vencimiento</label>
+                                <input 
+                                pInputText
+                                id="fecha_vencimiento"
+                                type="text"
+                                [value]="selectedInvoice?.fecha_vencimiento"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'fecha_vencimiento')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Timbrado</label>
+                                <input 
+                                pInputText
+                                id="timbrado"
+                                type="text"
+                                [value]="selectedInvoice?.timbrado"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'timbrado')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Establecimiento</label>
+                                <input 
+                                pInputText
+                                id="establecimiento"
+                                type="text"
+                                [value]="selectedInvoice?.establecimiento"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'establecimiento')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Punto de expedición</label>
+                                <input 
+                                pInputText
+                                id="punto_expedicion"
+                                type="text"
+                                [value]="selectedInvoice?.punto_expedicion"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'punto_expedicion')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Condición de Venta</label>
+                                <input 
+                                pInputText
+                                id="condicion_venta"
+                                type="text"
+                                [value]="selectedInvoice?.condicion_venta"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'condicion_venta')}"/>
+                            </div>
+                            <div class="field p-0 px-3 md:p-3 md:m-0 col-6 md:col-2"> 
+                                <label class="font-medium text-700">Total</label>
+                                <input 
+                                pInputText
+                                id="total"
+                                type="text"
+                                [value]="selectedInvoice?.total"
+                                readonly 
+                                [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'total')}"/>
+                            </div>
+                        </div>
                         <div class="flex flex-column md:flex-row md:align-items-center gap-3">
                             <span class="block p-input-icon-left">
                                 <i class="pi pi-search"></i>
@@ -221,7 +323,7 @@
                     <ng-template pTemplate="footer">
                         <tr>
                             <td colspan="3">
-                                <strong>Total</strong>                                
+                                <strong>Totales</strong>                                
                             </td>
                             <td>
                                 {{ total_exentas}}

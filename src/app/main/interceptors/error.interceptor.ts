@@ -57,15 +57,13 @@ export class ErrorInterceptor implements HttpInterceptor {
               break;
             case 401:
               errorResponse.code = error.status.toString();
-              if (error?.error?.includes('JWT expired')) {
-                errorResponse.message = 'Tu sesión ha expirado. Por favor, inicie sesión nuevamente.';
-                this.confirmationService.confirm({key: 'login', closeOnEscape: false, dismissableMask: false, message: 'Tu sesión ha expirado', acceptLabel: 'Iniciar sesión nuevamente',
-                  accept: () => {
-                    this.authService.logout();
-                    this.router.navigate(['auth/login']);
-                  }
-                });
-              } else {
+              if (error?.error?.code === 'token_not_valid') {
+                const currentUser = localStorage.getItem('currentUser');
+                console.log('currentUser', currentUser);
+                const refreshToken = JSON.parse(currentUser).refresh;
+                console.log('token', refreshToken);
+                this.authService.refresh(refreshToken);
+              } else {  
                 errorResponse.message = 'No estás autorizado para realizar esta acción.';
               }
               break;

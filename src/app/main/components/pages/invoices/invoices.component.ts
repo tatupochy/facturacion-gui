@@ -79,10 +79,9 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     
     this.colsInvoice = [
       { field: 'numero', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'numeracion', header: 'Numeración', width: '20%', order: true, center: true },
-      { field: 'fecha_emision', header: 'Fecha de Emisión', width: '10%', order: true, center: true },
+      { field: 'numeracion', header: 'Numeración', width: '30%', order: true, center: true },
+      { field: 'fecha_emision', header: 'Fecha de Emisión', width: '20%', order: true, center: true },
       { field: 'operacion' , header: 'Operación', width: '15%', order: true, center: true },
-      { field: 'cliente.nombre', header: 'Cliente', width: '20%', order: true, center: true },
       { field: 'total', header: 'Total', width: '15%', order: true, center: true },
       { field: 'timbrado', header: 'Timbrado', width: '15%', order: true, center: true },
       { field: 'actions', header: '', width: '100px', order: false, center: false },

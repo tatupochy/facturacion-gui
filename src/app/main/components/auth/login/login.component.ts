@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.titleService.setTitle('SDA - Iniciar Sesión');
+        this.titleService.setTitle('Iniciar Sesión');
 
         this.loginForm = this.fb.group({
             username: ['', Validators.required],
@@ -109,5 +109,30 @@ export class LoginComponent implements OnInit {
         });
 
     }
+
+    // refresh(refreshToken : string) {
+        
+    //     const user = this.setLoginData();
+
+    //     this.authenticationService.refresh(user?.password).subscribe({
+    //         next: (response) => {
+    //             if (!response) {
+    //                 this.messageService.add({severity: 'error', summary: 'Error', detail: 'Nombre de usuario o contraseña invalidos', life: gc.NOTIFICATION_DURATION });
+    //                 return;
+    //             }
+
+    //             this.router.navigate(['/home']);
+    //         },
+    //         error: (error) => {
+    //             this.messageService.add({ severity: 'error', summary: 'Error', detail: error });
+    //             this.loading = false;
+    //         },
+    //         complete: () => {
+    //             this.loading = false;
+    //         }
+    //     });
+
+        
+    // }
 
 }

@@ -26,6 +26,8 @@ export class AppTopBarComponent implements OnInit {
     // LoginProbar
     ngOnInit(): void {
 
+        console.log('this.authenticationService', this.authenticationService.loggedUser);
+
         this.username = this.authenticationService?.loggedUser?.name || 'Perfil'
         
     }
