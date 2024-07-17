@@ -54,7 +54,7 @@
                             </div>
                         </div>
                         <div class="flex justify-content-between align-items-center gap-3 w-full">
-                            <p-button label="Buscar" type="submit" [disabled]="filterForm?.invalid || filterForm?.disabled" (onclick)="searchFilterIvoices()" icon="pi pi-search"></p-button>
+                            <p-button label="Buscar" type="submit" [disabled]="filterForm?.invalid || filterForm?.disabled" (onClick)="searchFilterIvoices()" icon="pi pi-search"></p-button>
                             <p-button label="Agregar" [loading]="isLoadingNewInvoice" icon="pi pi-plus" (onClick)="showInvoiceDialog()"></p-button>
                         </div>
                     </form>
@@ -274,6 +274,21 @@
                         <form [formGroup]="invoiceForm" style="display: contents;">
                             <div class="grid p-fluid">
                                 <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-4"> 
+                                    <label class="font-medium text-700">Operación</label>
+                                    <p-dropdown 
+                                        id="operacion"
+                                        [options]="operations"
+                                        appendTo="body"
+                                        scrollHeight="50vh"
+                                        [resetFilterOnHide]="true"
+                                        [autoOptionFocus]="false"
+                                        [autoDisplayFirst]="false"
+                                        formControlName="operacion"
+                                        placeholder="Seleccione una opción"
+                                        [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'operacion')}">
+                                    </p-dropdown>
+                                </div>
+                                <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-4" *ngIf="invoiceForm.value.operacion === 'venta'">
                                     <label class="font-medium text-700">Cliente</label>
                                     <p-dropdown 
                                         id="cliente"
@@ -291,6 +306,26 @@
                                         formControlName="cliente"
                                         placeholder="Seleccione una opción"
                                         [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'cliente')}">
+                                    </p-dropdown>
+                                </div>
+                                <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-4" *ngIf="invoiceForm.value.operacion === 'compra'"> 
+                                    <label class="font-medium text-700">Proveedor</label>
+                                    <p-dropdown 
+                                        id="proveedor"
+                                        [options]="providers"
+                                        dataKey="id"
+                                        appendTo="body"
+                                        scrollHeight="50vh"
+                                        [filter]="true"
+                                        filterBy="nombre"
+                                        filterPlaceholder="Buscar"
+                                        [resetFilterOnHide]="true"
+                                        optionLabel="nombre"
+                                        [autoOptionFocus]="false"
+                                        [autoDisplayFirst]="false"
+                                        formControlName="proveedor"
+                                        placeholder="Seleccione una opción"
+                                        [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'proveedor')}">
                                     </p-dropdown>
                                 </div>
                                 <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-2"> 
@@ -357,8 +392,9 @@
                                     formControlName="punto_expedicion" 
                                     [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(invoiceForm, 'punto_expedicion')}"/>
                                 </div>
-                                <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-4"> 
-                                    <label class="font-medium text-700">Condición de vente</label>
+                                <div class="field p-0 px-3 pt-3 md:p-3 md:m-0 col-6 md:col-4" *ngIf="invoiceForm.value.operacion">
+                                    <label class="font-medium text-700" *ngIf="invoiceForm.value.operacion === 'venta'">Condición de Venta</label>
+                                    <label class="font-medium text-700" *ngIf="invoiceForm.value.operacion === 'compra'">Condición de Compra</label>
                                     <p-dropdown 
                                         id="condicion_venta"
                                         [options]="sale_conditions"

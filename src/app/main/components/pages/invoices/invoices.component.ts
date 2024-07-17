@@ -17,8 +17,10 @@ import { InvoiceItem } from 'src/app/main/models/invoice-item';
 import { InvoiceService } from 'src/app/main/service/invoice.service';
 import { ProductService } from 'src/app/main/service/product.service';
 import { CustomerService } from 'src/app/main/service/customer.service';
+import { ProviderService } from 'src/app/main/service/provider.service';
 import { Customer } from 'src/app/main/models/customer';
 import { Product } from 'src/app/main/models/product';
+import { Provider } from 'src/app/main/models/provider';
 
 @Component({
   selector: 'app-invoices',
@@ -30,6 +32,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   colsInvoice: any[] = [];
   invoices: Invoice[] = [];
   customers: Customer[] = [];
+  providers: Provider[] = [];
   products: Product[] = [];
   operations: String[] = ['venta', 'compra']
   sale_conditions: String[] = ['contado', 'credito']
@@ -63,6 +66,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     private invoiceService: InvoiceService,
     private productService: ProductService,
     private customerService: CustomerService,
+    private providerService: ProviderService,
     public utils: UtilsService,
   ) {}
     
@@ -97,7 +101,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     ];
 
     this.loadDataFromApi();
-
+    
+    this.initFilterForm();
   }
 
   ngOnDestroy(): void {
@@ -110,6 +115,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
     console.log('loadData');
     this.getCustomers();
+    this.getProviders();
     this.getProducts();
   }
   // Forms
@@ -118,11 +124,13 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     this.invoiceForm = this.fb.group({
       id: [this.selectedInvoice.id],
       fecha_emision: [format(this.currentDate, 'yyyy/MM/dd'), [Validators.required]],
-      cliente: [this.selectedInvoice.cliente, [Validators.required]],
+      cliente: [this.selectedInvoice.cliente],
+      proveedor: [this.selectedInvoice.proveedor],
       establecimiento: [this.selectedInvoice.establecimiento, [Validators.required, Validators.maxLength(3)]],
       punto_expedicion: [this.selectedInvoice.punto_expedicion, [Validators.required, Validators.maxLength(3)]],
       fecha_vencimiento: [null],
       timbrado: [this.selectedInvoice.timbrado, [Validators.required, Validators.maxLength(7)]],
+      operacion: [this.selectedInvoice.operacion, [Validators.required]],
       condicion_venta: [this.selectedInvoice.condicion_venta, [Validators.required]],
       items: this.fb.array([])
     });
@@ -147,12 +155,16 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   // Invoice
 
   searchFilterIvoices() {
+    console.log('searchFilterIvoices');
+
     const data = this.filterForm.value;
 
     let filter = {
       operacion: data.operacion,
       fecha_emision: data.fecha_emision
     }
+
+    console.log('filter', filter);
 
     this.isSearchingIvoices = true;
 
@@ -198,6 +210,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     invoice.numeracion = data.numeracion,
     invoice.fecha_emision = data.fecha_emision,
     invoice.cliente = data.cliente,
+    invoice.proveedor = data.proveedor,
+    invoice.operacion = data.operacion,
     invoice.sub_total = data.sub_total,
     invoice.total = data.total,
     invoice.establecimiento = data.establecimiento,
@@ -513,6 +527,32 @@ export class InvoicesComponent implements OnInit, OnDestroy {
           severity: 'error',
           summary: 'Error',
           detail: 'Ocurrió un error al obtener clientes',
+          life: gc.NOTIFICATION_DURATION
+        });
+      }
+    });
+  }
+
+  getProviders(update?: boolean) {
+    console.log("getProviders")
+    this.providerService.getAllProviders().subscribe({
+      next: (response) => {
+        this.providers = response;
+        if (update) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Datos Actualizados',
+            detail: 'Se han actualizado los datos de los proveedores',
+            life: gc.NOTIFICATION_DURATION
+          });
+        }
+      },
+      error: (error: any) => {
+        console.error('Error al obtener proveedores:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Ocurrió un error al obtener proveedores',
           life: gc.NOTIFICATION_DURATION
         });
       }

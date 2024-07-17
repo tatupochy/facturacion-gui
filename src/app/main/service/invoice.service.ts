@@ -38,11 +38,8 @@ export class InvoiceService {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     const options = { headers };
     const body = {
-      entity: filter.entity,
-      documentarySerie: filter.documentarySerie,
-      identifier: filter.identifier,
-      invoiceDateStart: filter.invoiceDateStart,
-      invoiceDateEnd: filter.invoiceDateEnd,
+      operacion: filter.operacion,
+      fecha_inicio: filter.fecha_inicio,
     }
     return this.http.post<any>(`${this.#BASE_URL}/buscar/`, JSON.stringify(body), options).pipe(
       map(response => {
