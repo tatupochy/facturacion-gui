@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 
         if (!logged) {
             
-            if (this.authenticationService.hasRoles(['Administrador', 'Escribano', 'Supervisor'])) {
+            if (this.authenticationService.loggedUser.access) {
                 this.router.navigate(['/home']);
                 sessionStorage.setItem('logged', 'true');
             } else {

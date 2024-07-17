@@ -41,6 +41,9 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   invoiceItemForm: FormGroup = new FormGroup({});
   displayNewInvoiceDialog: boolean = false;
   isSearchingIvoices: boolean = false;
+  total_exentas: number = 0;
+  total_iva_10: number = 0;
+  total_iva_5: number = 0;
 
   filterForm: FormGroup = new FormGroup({});
  
@@ -93,11 +96,11 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
     this.colsInvoiceItems = [
       { field: 'index', header: 'N°', width: '5%', order: false, center: true },
-      { field: 'producto.nombre', header: 'Producto', width: '25%', order: true, center: true },
-      { field: 'cantidad', header: 'Cantidad', width: '25%', order: true, center: true },
-      { field: 'iva_exenta', header: 'Exentas', width: '25%', order: true, center: true },
-      { field: 'iva_10', header: '10', width: '25%', order: true, center: true },
-      { field: 'iva_5', header: '5', width: '25%', order: true, center: true },
+      { field: 'producto.nombre', header: 'Producto', width: '35%', order: true, center: true },
+      { field: 'cantidad', header: 'Cantidad', width: '15%', order: true, center: true },
+      { field: 'iva_exenta', header: 'Exentas', width: '15%', order: true, center: true },
+      { field: 'iva_10', header: '10', width: '15%', order: true, center: true },
+      { field: 'iva_5', header: '5', width: '15%', order: true, center: true },
     ];
 
     this.loadDataFromApi();
@@ -400,9 +403,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
       const responseInvoice = await firstValueFrom(this.invoiceService.getInvoiceById(invoice?.id));
       if (responseInvoice) {
         this.selectedInvoice = responseInvoice;
-        this.initInvoiceForm();
-        this.initInvoiceItemForm();
         this.displayInvoiceItemsDialog = true;
+        this.calculateTotals(this.selectedInvoice);
       }
     } catch (error) {
       console.error(error);
@@ -413,6 +415,20 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
     this.isLoadingInvoiceItems = false;
     this.isLoadingInvoiceItemsIndex = 0;
+
+  } 
+  
+  calculateTotals(selectedInvoice: Invoice) {
+
+    for (let item of selectedInvoice.items) {
+      if (item.producto.iva === '0') {
+        this.total_exentas += item.cantidad * item.producto.precio;
+      } else if (item.producto.iva === '10') {
+        this.total_iva_10 += item.cantidad * item.producto.precio;
+      } else if (item.producto.iva === '5') {
+        this.total_iva_5 += item.cantidad * item.producto.precio;
+      }
+    }  
 
   }
 
