@@ -39,7 +39,7 @@ export class InvoiceService {
     const options = { headers };
     const body = {
       operacion: filter.operacion,
-      fecha_inicio: filter.fecha_inicio,
+      fecha_emision: filter.fecha_emision,
     }
     return this.http.post<any>(`${this.#BASE_URL}/buscar/`, JSON.stringify(body), options).pipe(
       map(response => {

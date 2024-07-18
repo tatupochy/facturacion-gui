@@ -462,12 +462,29 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   
     // Obtener datos de la factura y del producto
     let invoice = new Invoice;
-    console.log('Form', this.invoiceItemForm.value);
     let producto = this.invoiceItemForm.value.producto;
-    let cantidad = this.invoiceItemForm.value.cantidad;  // Asegurarse de que el producto se ha seleccionado del formulario
-    
-    console.log('invoice', invoice);
-    console.log('product', producto);
+    // raise error if quantity is less than 1, or is more than the stock
+    let cantidad = this.invoiceItemForm.value.cantidad;
+    if (this.invoiceForm.value.operacion === 'venta') {
+      if (cantidad < 1) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'La cantidad debe ser mayor a 0',
+          life: gc.NOTIFICATION_DURATION
+        });
+        return;
+      }
+      if (cantidad > producto.stock) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'La cantidad no puede ser mayor al stock',
+          life: gc.NOTIFICATION_DURATION
+        });
+        return;
+      }
+    }
 
     // Crear un nuevo InvoiceItem
     let invoiceItem = new InvoiceItem();
@@ -535,7 +552,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     console.log("getCustomers")
     this.customerService.getAllCustomers().subscribe({
       next: (response) => {
-        this.customers = response;
+        // filter only active customers
+        this.customers = response.filter(c => c.activo);
         if (update) {
           this.messageService.add({
             severity: 'success',
@@ -561,7 +579,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     console.log("getProviders")
     this.providerService.getAllProviders().subscribe({
       next: (response) => {
-        this.providers = response;
+        // filter only active providers
+        this.providers = response.filter(p => p.activo);
         if (update) {
           this.messageService.add({
             severity: 'success',
@@ -587,7 +606,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
     console.log("getProducts")
     this.productService.getAllProducts().subscribe({
       next: (response) => {
-        this.products = response;
+        // filter products with stock > 0
+        this.products = response.filter(p => p.stock > 0);
         if (update) {
           this.messageService.add({
             severity: 'success',
