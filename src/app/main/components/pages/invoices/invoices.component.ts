@@ -40,6 +40,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   invoiceForm: FormGroup = new FormGroup({});
   invoiceItemForm: FormGroup = new FormGroup({});
   displayNewInvoiceDialog: boolean = false;
+  displayNewInvoiceItemDialog: boolean = false;
   isSearchingIvoices: boolean = false;
   total_exentas: number = 0;
   total_iva_10: number = 0;
@@ -200,6 +201,14 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   closeInvoiceDialog() {
     this.displayNewInvoiceDialog = false;
   }
+
+  showNewInvoiceItemDialog() {
+    this.displayNewInvoiceItemDialog = true;
+  }
+
+  closeNewInvoiceItemDialog() {
+    this.displayNewInvoiceItemDialog = false;
+  } 
 
   setInvoiceData() {
 
