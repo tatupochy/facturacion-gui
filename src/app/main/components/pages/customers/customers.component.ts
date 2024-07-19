@@ -10,7 +10,6 @@ import { HttpError } from 'src/app/main/models/http.error';
 import { Customer } from 'src/app/main/models/customer';
 
 import { CustomerService } from 'src/app/main/service/customer.service';
-import { State } from 'src/app/main/models/state';
 import { InputSwitch } from 'primeng/inputswitch';
 
 
@@ -25,9 +24,6 @@ export class CustomersComponent implements OnInit {
   customers: Customer[] = [];
   selectedCustomer: Customer = new Customer();
   customerForm: FormGroup = new FormGroup({});
-
-
-  states: State[] = []
 
   isLoadingTable: boolean = false;
   displayCustomerDialog: boolean = false;

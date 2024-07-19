@@ -16,47 +16,29 @@ export class AppMenuComponent implements OnInit {
 
   ngOnInit() {
     this.model = [
-      // { label: 'Procesos', icon: 'pi pi-truck',
-      //   items: [
-      //     { label: 'Transferencias', icon: 'pi pi-truck', routerLink: ['/home/pages/transfers'] },
-      //     { label: 'Digitalización', icon: 'pi pi-file', routerLink: ['/home/pages/companies'] },
-      //     { label: 'Control de Calidad', icon: 'pi pi-verified', routerLink: ['/home/pages/companies'] },
-      //     { label: 'Consultas', icon: 'pi pi-search', routerLink: ['/home/pages/companies'] },
-      //     { label: 'Préstamos', icon: 'pi pi-file-export', routerLink: ['/home/pages/companies'] },
-      //   ]
-      // },
-      { label: 'Varios',
+      { label: 'Peronas', icon: 'pi pi-user',
         items: [
-          { label: 'Productos', icon: 'pi pi-tags', routerLink: ['/home/pages/products'] },
           { label: 'Clientes', icon:'pi pi-user', routerLink: ['/home/pages/customers'] },
           { label: 'Proveedores', icon:'pi pi-user', routerLink: ['/home/pages/providers'] },
-          { label: 'Facturas', icon:'pi pi-receipt', routerLink: ['/home/pages/invoices'] },
-          { label: 'Ventas', icon:'pi pi-receipt', routerLink: ['/home/pages/sales'] },
-          { label: 'Compras', icon:'pi pi-receipt', routerLink: ['/home/pages/purchases'] }
         ]
       },
-      // { label: 'Tipos',
-      //   items: [
-      //     { label: 'Entidades', icon: 'pi pi-building', routerLink: ['/home/pages/types/entity-types'] },
-      //     { label: 'Datos', icon: 'pi pi-database', routerLink: ['/home/pages/types/data-types'] },
-      //   ]
-      // },
-      // { label: 'Tipos',
-      //   items: [
-      //     { label: 'Entidades', icon: 'pi pi-building', routerLink: ['/home/pages/companies'] },
-      //   ]
-      // },
-      // { label: 'Ayuda',
-      //   items: [
-      //       { label: 'Base Legal', icon: 'pi pi-fw pi-align-center', routerLink: ['/utilities/icons'] },
-      //       { label: 'Descripción de Opciones', icon: 'pi pi-fw pi-sitemap', routerLink: ['/utilities/icons'] },
-      //   ],
-      // },
-      //  { label: 'Seguridad', icon: 'pi pi-fw pi-cog',
-      //    items: [
-      //      { label: 'Usuarios', icon: 'pi pi-fw pi-user', routerLink: ['/home/pages/users'] },
-      //   ],
-      // },
+      { label: 'Inventario', icon: 'pi pi-tags',
+        items:[
+          { label: 'Productos', icon: 'pi pi-tags', routerLink: ['/home/pages/products'] },
+        ]
+      },
+      { label: 'Movimientos', icon: 'pi pi-money-bill',
+        items:[
+          { label: 'Facturas', icon:'pi pi-receipt', routerLink: ['/home/pages/invoices'] },
+          { label: 'Ventas', icon:'pi pi-shopping-cart', routerLink: ['/home/pages/sales'] },
+          { label: 'Compras', icon:'pi pi-cart-arrow-down', routerLink: ['/home/pages/purchases'] },
+        ]
+      },
+      { label: 'Reportes', icon: 'pi pi-chart-bar',
+          items:[
+            { label: 'Reportes', icon:'pi pi-chart-bar', routerLink: ['/home/pages/reports'] }
+          ]
+      }
     ];
   }
 }

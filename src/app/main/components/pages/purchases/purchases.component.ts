@@ -10,9 +10,7 @@ import { HttpError } from 'src/app/main/models/http.error';
 import { Purchase } from 'src/app/main/models/purchase';
 
 import { PurchaseService } from 'src/app/main/service/purchase.service';
-import { State } from 'src/app/main/models/state';
 import { InputSwitch } from 'primeng/inputswitch';
-import { StateService } from 'src/app/main/service/state.service';
 
 
 @Component({
@@ -26,9 +24,6 @@ export class PurchasesComponent implements OnInit {
   purchases: Purchase[] = [];
   selectedPurchase: Purchase = new Purchase();
   purchaseForm: FormGroup = new FormGroup({});
-
-
-  states: State[] = []
 
   isLoadingTable: boolean = false;
   displayPurchaseDialog: boolean = false;
@@ -51,7 +46,7 @@ export class PurchasesComponent implements OnInit {
       { field: 'proveedor.nombre', header: 'Proveedor', width: '40%', order: true, center: false },
       { field: 'cantidad', header: 'Cantidad', width: '20%', order: true, center: true },
       { field: 'producto.nombre', header: 'Producto', width: '20%', order: true, center: true },
-      { field: 'producto.precio', header: 'Precio', width: '1a0%', order: true, center: true },
+      { field: 'producto.costo', header: 'Costo', width: '1a0%', order: true, center: true },
       { field: 'factura.numeracion', header: 'Factura', width: '10%', order: true, center: true }
     ];
 

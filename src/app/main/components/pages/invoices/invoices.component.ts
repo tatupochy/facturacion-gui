@@ -150,7 +150,7 @@ export class InvoicesComponent implements OnInit, OnDestroy {
 
   initFilterForm(){
     this.filterForm = this.fb.group({
-      operacion: [null],
+      operacion: [null, Validators.required],
       fecha_emision: [null]
     });
   }
@@ -504,6 +504,8 @@ export class InvoicesComponent implements OnInit, OnDestroy {
   
     // Actualizar el formulario
     this.invoiceForm.setControl('items', itemsArray);
+    // limpiar el formulario de item
+    this.invoiceItemForm.reset();
     console.log('invoiceForm', this.invoiceForm)
   }
   

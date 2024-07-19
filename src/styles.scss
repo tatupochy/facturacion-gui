@@ -481,15 +481,18 @@ $text-color: #343a40;
 
     .p-datatable.p-datatable-gridlines .p-datatable-tfoot > tr > td:first-child {
         border-width: 0 0px 2px 0;
+        text-align: left;
     }
 
     .p-datatable.p-datatable-gridlines .p-datatable-tfoot > tr > td:last-child {
         border-width: 0 0 2px 2px;
+        text-align: center;
     }
 
     .p-datatable.p-datatable-gridlines .p-datatable-tfoot > tr > td {
         border: 1px solid $table-border-color;
         border-width: 0px 0px 2px 2px;
+        text-align: center;
     }
 
     .p-datatable.p-datatable-gridlines .p-datatable-header {

@@ -10,9 +10,7 @@ import { HttpError } from 'src/app/main/models/http.error';
 import { Product } from 'src/app/main/models/product';
 
 import { ProductService } from 'src/app/main/service/product.service';
-import { State } from 'src/app/main/models/state';
 import { InputSwitch } from 'primeng/inputswitch';
-import { StateService } from 'src/app/main/service/state.service';
 
 
 @Component({
@@ -26,9 +24,6 @@ export class ProductsComponent implements OnInit {
   products: Product[] = [];
   selectedProduct: Product = new Product();
   productForm: FormGroup = new FormGroup({});
-
-
-  states: State[] = []
 
   isLoadingTable: boolean = false;
   displayProductDialog: boolean = false;

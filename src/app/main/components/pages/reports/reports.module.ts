@@ -10,15 +10,18 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';;
+import { InputSwitchModule } from 'primeng/inputswitch';
 import { DialogModule } from 'primeng/dialog';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import { AppComponent } from 'src/app/app.component';
-import { DataTypesComponent } from './data-types.component';
-import { DataTypesRoutingModule } from './data-types-routing.module';
+import { ReportsComponent } from './reports.component';
+import { ReportsRoutingModule } from './reports-routing.module';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
-    DataTypesComponent
+    ReportsComponent
   ],
   imports: [
     CommonModule,
@@ -26,17 +29,20 @@ import { DataTypesRoutingModule } from './data-types-routing.module';
     ReactiveFormsModule,
     HttpClientModule,
 
-    DataTypesRoutingModule,
+    ReportsRoutingModule,
 
     NgIconsModule,
 
     TableModule,
+    CalendarModule,
     ButtonModule,
     InputTextModule,
     DropdownModule,
+    InputSwitchModule,
     DialogModule,
+    InputNumberModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class DataTypesModule { }
+export class ReportsModule { }

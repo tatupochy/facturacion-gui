@@ -10,7 +10,6 @@ import { HttpError } from 'src/app/main/models/http.error';
 import { Provider } from 'src/app/main/models/provider';
 
 import { ProviderService } from 'src/app/main/service/provider.service';
-import { State } from 'src/app/main/models/state';
 import { InputSwitch } from 'primeng/inputswitch';
 
 
@@ -25,9 +24,6 @@ export class ProvidersComponent implements OnInit {
   providers: Provider[] = [];
   selectedProvider: Provider = new Provider();
   providerForm: FormGroup = new FormGroup({});
-
-
-  states: State[] = []
 
   isLoadingTable: boolean = false;
   displayProviderDialog: boolean = false;
