@@ -48,10 +48,11 @@ export class ProductsComponent implements OnInit {
     
     this.colsProduct = [
      
-      { field: 'nombre', header: 'Nombre', width: '40%', order: true, center: false },
+      { field: 'nombre', header: 'Nombre', width: '30%', order: true, center: false },
       { field: 'descripcion', header: 'Descripcion', width: '20%', order: true, center: true },
       { field: 'stock', header: 'Stock', width: '10%', order: true, center: true },
       { field: 'precio', header: 'Precio', width: '10%', order: true, center: true },
+      { field: 'costo', header: 'Costo', width: '10%', order: true, center: true },
       { field: 'iva', header: 'IVA', width: '10%', order: true, center: true },
       { field: 'activo', header: 'Estado', width: '10%', order: true, center: true },
       { field: 'actions', header: '', width: '100px', order: false, center: false },
@@ -76,7 +77,9 @@ export class ProductsComponent implements OnInit {
       id: [this.selectedProduct.id],
       nombre: [this.selectedProduct.nombre, [Validators.required, Validators.maxLength(255)]],
       descripcion: [this.selectedProduct.descripcion, [Validators.required, Validators.maxLength(255)]],
+      stock: [this.selectedProduct.stock, [Validators.required, Validators.maxLength(10)]],
       precio: [this.selectedProduct.precio, [Validators.required, Validators.maxLength(10)]],
+      costo: [this.selectedProduct.costo, [Validators.required, Validators.maxLength(10)]],
       iva: [this.selectedProduct.iva, [Validators.required, Validators.maxLength(10)]],
       activo: [this.selectedProduct.activo],
     });
@@ -111,7 +114,9 @@ export class ProductsComponent implements OnInit {
     product.id = data.id;
     product.nombre = data.nombre;
     product.descripcion = data.descripcion;
+    product.stock = data.stock;
     product.precio = data.precio;
+    product.costo = data.costo;
     product.iva = data.iva;
     product.activo = data.activo;
 

@@ -10,6 +10,8 @@ export class Product {
 
         public stock: number | null = null,
 
+        public costo: number | null = null,
+
         public descripcion: string | null = null,
 
         public precio: number | null = null,

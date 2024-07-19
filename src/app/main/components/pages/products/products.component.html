@@ -166,6 +166,37 @@
                                 </small>
                             </div>
                         </div>
+                        <div class="field col-12"> <!-- Costo -->
+                            <label class="block font-medium">Costo <span class="p-error">*</span></label>
+                            <p-inputNumber 
+                            id="costo"
+                            placeholder="Costo"
+                            formControlName="costo"
+                            [maxFractionDigits]="2"
+                            [minFractionDigits]="2"
+                            [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(productForm, 'costo')}"/>
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(productForm, 'costo') ? 'visible' : 'hidden'}">
+                                        <span>{{utils.getValidationErrorMessage(productForm, 'costo')}}</span>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="field col-12"> <!-- Stock -->
+                            <label class="block font-medium">Stock <span class="p-error">*</span></label>
+                            <input
+                            id="stock"
+                            type="text"
+                            pInputText 
+                            placeholder="Ingrese el stock"
+                            [maxLength]="10"
+                            formControlName="stock"
+                            [ngClass]="{'ng-invalid ng-dirty': utils.isFieldInvalid(productForm, 'stock')}">
+                            <div style="height: 16px;">
+                                <small class="p-error" [ngStyle]="{'visibility': utils.isFieldInvalid(productForm, 'stock') ? 'visible' : 'hidden'}">
+                                        <span>{{utils.getValidationErrorMessage(productForm, 'stock')}}</span>
+                                </small>
+                            </div>
+                        </div>
                         <div class="field col-12"> <!-- IVA -->
                             <label class="block font-medium">IVA <span class="p-error">*</span></label>
                             <input
