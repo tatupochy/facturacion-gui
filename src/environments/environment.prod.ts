@@ -1,8 +1,7 @@
-const apiUrl = "https://www.sif.com.py"
+const apiUrl = "https://facturacion-omza.onrender.com/api";
 
 export const environment = {
   production: false,
-  apiUrlDirector: apiUrl + "/noverumDirector",
-  apiUrlAdmin: apiUrl + "/noverumAdmin",
-  apiUrlSifSecurity: apiUrl + '/noverumSecure',
+  apiUrl: "https://facturacion-omza.onrender.com/api",
+  apiUrlSifSecurity: apiUrl + '/seguridad',
 };
